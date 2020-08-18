@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask
 from app_extensions import db
+from error_handlers import error_handler
 from controllers.parents import parents_module
 from controllers.children import children_module
 
@@ -30,6 +31,7 @@ def create_app(settings_override=None):
     app.register_blueprint(children_module, url_prefix='/api/v1/children')
 
     extensions(app)
+    error_handler(app)
 
     return app
 
