@@ -53,5 +53,7 @@ $ pipenv run flake8 .
 $ pipenv lock -r > requirements.txt
 ```
 
-## [API documentation](https://documenter.getpostman.com/view/7833390/T1LLF8m4?version=latest)
+## API documentation
+- [Postman Docs](https://documenter.getpostman.com/view/7833390/T1LLF8m4?version=latest)
+- Swagger - http://localhost:5000/apidocs
 

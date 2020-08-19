@@ -11,17 +11,62 @@ parents_module = Blueprint('parent', __name__)
 # ======================================================================================
 @parents_module.route('/', methods=['GET'])
 def get_parents():
-    user_data = Parent.objects().exclude('_cls')
+    """Get all Parents
+    This route returns a list of Parent objects
+    ---
+    tags:
+      - name: Parents
+    definitions:
+      Parent:
+        type: object
+        properties:
+          first_name:
+            type: string
+          last_name:
+            type: string
+          address:
+            type: object
+            properties:
+              city:
+                type: string
+              state:
+                type: string
+              street:
+                type: string
+              zip:
+                type: number
+    responses:
+      200:
+        description: A list of Parent objects
+    """
+    user_data = Parent.objects()
     return {'success': True, 'count': len(user_data), 'data': user_data}, 200
 
 
 # ======================================================================================
 # @desc      Parent by ID
-# @route     GET /api/v1/parents/<parent_id>
+# @route     GET /api/v1/parents/<string:parent_id>
 # @access    Public
 # ======================================================================================
-@parents_module.route('/<parent_id>', methods=['GET'])
+@parents_module.route('/<string:parent_id>', methods=['GET'])
 def get_parent_by_id(parent_id):
+    """Get a single Parent by ID
+    This route takes in an ID and returns a single Parent object
+    ---
+    tags:
+      - name: Parents
+    parameters:
+      - name: parent_id
+        in: path
+        type: string
+        required: true
+        default: 5f32a26f99392c5cfd50fa76
+    responses:
+      200:
+        description: A single parent object
+        schema:
+          $ref: '#/definitions/Parent'
+    """
     p = Parent.objects.get(id=parent_id)
     return {'success': True, 'data': p}, 200
 
@@ -33,6 +78,27 @@ def get_parent_by_id(parent_id):
 # ======================================================================================
 @parents_module.route('/', methods=['POST'])
 def create_parent():
+    """Create Parent
+    Creates a Parent Object
+    ---
+    tags:
+      - name: Parents
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+        - in: body
+          name: parent
+          description: The Parent to create.
+          schema:
+            $ref: '#/definitions/Parent'
+    responses:
+      200:
+        description: A single parent object
+        schema:
+            $ref: '#/definitions/Parent'
+    """
     data = request.json
 
     # Validate
@@ -49,22 +115,62 @@ def create_parent():
 
 # ======================================================================================
 # @desc      Delete Parent
-# @route     DELETE /api/v1/parents/<parent_id>
+# @route     DELETE /api/v1/parents/<string:parent_id>
 # @access    Public
 # ======================================================================================
-@parents_module.route('/<parent_id>', methods=['DELETE'])
+@parents_module.route('/<string:parent_id>', methods=['DELETE'])
 def delete_parent(parent_id):
+    """Delete Parent
+    Deletes a Parent by ID
+    ---
+    tags:
+      - name: Parents
+    parameters:
+      - name: parent_id
+        in: path
+        type: string
+        required: true
+    responses:
+      200:
+        description: message of deletion
+    """
     Parent.objects(id=parent_id).delete()
     return {'success': True, 'data': "Data Deleted"}, 200
 
 
 # ======================================================================================
 # @desc      Update Parent
-# @route     PUT /api/v1/parents/<parent_id>
+# @route     PUT /api/v1/parents/<string:parent_id>
 # @access    Public
 # ======================================================================================
-@parents_module.route('/<parent_id>', methods=['PUT'])
+@parents_module.route('/<string:parent_id>', methods=['PUT'])
 def update_parent(parent_id):
+    """Update Parent
+    Updates a Parent Object
+    ---
+    tags:
+      - name: Parents
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+        - name: parent_id
+          in: path
+          type: string
+          required: true
+          description: id of the parent to be updated
+        - in: body
+          name: parent
+          description: The Parent to update.
+          schema:
+            $ref: '#/definitions/Parent'
+    responses:
+      200:
+        description: A single parent object
+        schema:
+            $ref: '#/definitions/Parent'
+    """
     data = request.json
 
     parent = Parent.objects.get(id=parent_id)

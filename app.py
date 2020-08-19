@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask
-from app_extensions import db
+from app_extensions import db, swagger
 from error_handlers import error_handler
 from controllers.parents import parents_module
 from controllers.children import children_module
@@ -44,6 +44,7 @@ def extensions(app):
     :return: None
     """
     db.init_app(app)
+    swagger.init_app(app)
 
     return None
 
